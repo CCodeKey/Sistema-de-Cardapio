@@ -1,1 +1,1 @@
-# node-app
+# Projeto de Cardapio online desenvolvido com Node.js e Postgres
