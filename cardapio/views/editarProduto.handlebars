@@ -1,0 +1,7 @@
+<h1>Editar Produto</h1>
+<form action="/administrator/atualizar/{{produto.id}}" method="POST">
+    <input type="text" name="nome" value="{{produto.nome}}" required>
+    <input type="number" name="preco" value="{{produto.preco}}" required>
+    <input type="text" name="descricao" value="{{produto.descricao}}" required>
+    <button type="submit">Atualizar</button>
+</form>

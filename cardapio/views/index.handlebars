@@ -1,0 +1,19 @@
+  <h2>Cardapio</h2>
+        <ul>
+            {{#each cardapio}}
+                <li>
+                    <h3>{{this.nome}}</h3>
+                    <p>Preço: R$ {{this.preco}}</p>
+                    <p>{{this.descricao}}</p>
+                    <form action="/carrinho/adicionarNoCarrinho" method="POST">
+                        <input type="hidden" name="id" value="{{this.id}}">
+                        <input type="hidden" name="nome" value="{{this.nome}}">
+                        <input type="hidden" name="preco" value="{{this.preco}}">
+                        <input type="hidden" name="descricao" value="{{this.descricao}}">
+                        <input type="hidden" name="quantidade" value="1" min="1">
+                        <button type="submit">Adicionar ao Carrinho</button>
+                    </form>
+                </li>
+            {{/each}}
+        </ul>
+    </main>
