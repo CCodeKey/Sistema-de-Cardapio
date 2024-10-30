@@ -10,5 +10,6 @@ router.post('/administrator/adicionar', controller.adicionarItem);
 router.get('/administrator/atualizar/:id', controller.renderEditarProduto);  // Rota POST para adicionar o produto
 router.post('/administrator/atualizar/:id', controller.editarItem);
 router.get('/administrator/remover/:id', controller.deletarItem);
+router.get('/comprar', controller.comprar);
 
 export default router;

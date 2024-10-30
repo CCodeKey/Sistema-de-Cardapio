@@ -116,3 +116,7 @@ export async function deletarItem (req, res) {
         res.status(500).send('Erro no servidor');
     }
 };
+
+export function comprar(req, res) {
+    res.render('comprar');
+};

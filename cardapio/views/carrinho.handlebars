@@ -1,15 +1,17 @@
-<h1>Seu Carrinho</h1>
+<div class="container py-5">
+    <h1 class="row">Seu Carrinho</h1>
     {{#if carrinho.length}}
-        <ul>
-            {{#each carrinho}}
-                <li>
-                    Nome: {{this.nome}} <br>
-                    Preço: R$ {{this.preco}} <br>
-                    Descrição: {{this.descricao}} <br>
-                    Quantidade: {{this.quantidade}}
-                </li>
-            {{/each}}
-        </ul>
+    <ul class="row">
+        {{#each carrinho}}
+        <li>
+            Nome: {{this.nome}} <br>
+            Preço: R$ {{this.preco}} <br>
+            Descrição: {{this.descricao}} <br>
+            Quantidade: {{this.quantidade}}
+        </li>
+        {{/each}}
+    </ul>
     {{else}}
-        <p>Seu carrinho está vazio.</p>
+    <p class="row">Seu carrinho está vazio.</p>
     {{/if}}
+</div>
