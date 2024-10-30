@@ -3,11 +3,14 @@
     {{#if carrinho.length}}
     <ul class="row">
         {{#each carrinho}}
-        <li>
-            Nome: {{this.nome}} <br>
-            Preço: R$ {{this.preco}} <br>
-            Descrição: {{this.descricao}} <br>
-            Quantidade: {{this.quantidade}}
+        <li class="col-12 my-3">
+            <strong>Nome:</strong> {{this.nome}} <br>
+            <strong>Preço:</strong> R$ {{this.preco}} <br>
+            <strong>Descrição:</strong> {{this.descricao}} <br>
+            <strong>Quantidade:</strong> {{this.quantidade}} <br>
+            <button class="btn btn-primary mt-2">
+                <a href="/comprar/{{this.id}}" class="text-white text-decoration-none">Comprar</a>
+            </button>
         </li>
         {{/each}}
     </ul>

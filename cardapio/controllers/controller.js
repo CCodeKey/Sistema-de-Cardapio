@@ -1,6 +1,6 @@
 import pool from '../database/db.js';
 
-export async function home (req, res){
+export async function home(req, res) {
     try {
         const result = await pool.query('SELECT * FROM produtos');
         const cardapio = result.rows;  // Armazena os produtos na variável cardapio
@@ -11,7 +11,7 @@ export async function home (req, res){
     }
 };
 
-export function adicionarNoCarrinho (req, res) {
+export function adicionarNoCarrinho(req, res) {
     const { id, nome, preco, descricao, quantidade } = req.body;
 
     // Verifica se a sessão do carrinho já foi criada; se não, cria uma nova
@@ -34,13 +34,13 @@ export function adicionarNoCarrinho (req, res) {
     res.redirect('/');
 };
 
-export function carrinho (req, res) {
+export function carrinho(req, res) {
     // Obtém o carrinho da sessão ou cria um carrinho vazio se não houver nenhum
     const carrinho = req.session.carrinho || [];
     res.render('carrinho', { carrinho });
 };
 
-export function renderAdicionarProduto (req, res) {
+export function renderAdicionarProduto(req, res) {
     res.render('adicionarProduto');
 };
 
@@ -60,7 +60,7 @@ export async function adicionarItem(req, res) {
     }
 }
 
-export async function renderEditarProduto (req, res) {
+export async function renderEditarProduto(req, res) {
     const { id } = req.params;
     try {
         const result = await pool.query('SELECT * FROM produtos WHERE id = $1', [id]);
@@ -75,15 +75,15 @@ export async function renderEditarProduto (req, res) {
     }
 };
 
-export async function editarItem (req, res) {
+export async function editarItem(req, res) {
     const { id } = req.params;
     const { nome, preco, descricao } = req.body;
-    
+
     console.log('ID do produto:', id);
     console.log('NOME do produto:', nome);
     console.log('PRECO do produto:', preco);
     console.log('DESCRICAO do produto:', descricao);
-    
+
     try {
         await pool.query('UPDATE produtos SET nome = $1, preco = $2, descricao = $3 WHERE id = $4', [nome, preco, descricao, id]);
         res.redirect('/'); // Redireciona após a edição
@@ -93,7 +93,7 @@ export async function editarItem (req, res) {
     }
 };
 
-export async function deletarItem (req, res) {
+export async function deletarItem(req, res) {
     const { id } = req.params;
 
     // Validação do ID
@@ -103,7 +103,7 @@ export async function deletarItem (req, res) {
 
     try {
         const result = await pool.query('DELETE FROM produtos WHERE id = $1', [id]);
-        
+
         // Verifica se algum produto foi excluído
         if (result.rowCount === 0) {
             return res.status(404).send('Produto não encontrado');
@@ -117,6 +117,24 @@ export async function deletarItem (req, res) {
     }
 };
 
-export function comprar(req, res) {
-    res.render('comprar');
-};
+export async function comprar(req, res) {
+    const produtoId = req.params.id;
+    try {
+        const result = await pool.query('SELECT * FROM produtos WHERE id = $1', [produtoId]);
+        const produto = result.rows[0];
+
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado');
+        }
+
+        // Supondo que você já tenha a quantidade em algum lugar
+        const quantidade = produto.quantidade || 1; // Ajuste isso conforme a lógica de seu projeto
+        const precoTotal = produto.preco * quantidade;
+
+        // Passa o preço total para o template
+        res.render('comprar', { produto, precoTotal, quantidade });
+    } catch (error) {
+        console.error('Erro ao buscar produto:', error);
+        res.status(500).send('Erro ao buscar produto');
+    }
+}
