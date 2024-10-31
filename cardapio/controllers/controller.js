@@ -138,19 +138,32 @@ export async function deletarItem(req, res) {
 
 export async function comprar(req, res) {
     const produtoId = req.params.id;
+
     try {
+        // Verifica se o carrinho está na sessão
+        if (!req.session.carrinho) {
+            return res.status(400).send('Carrinho não encontrado.');
+        }
+
+        // Encontra o produto no carrinho
+        const produtoCarrinho = req.session.carrinho.find(item => item.id === produtoId);
+        if (!produtoCarrinho) {
+            return res.status(404).send('Produto não encontrado no carrinho.');
+        }
+
+        // Busca os detalhes completos do produto da base de dados
         const result = await pool.query('SELECT * FROM produtos WHERE id = $1', [produtoId]);
         const produto = result.rows[0];
 
         if (!produto) {
-            return res.status(404).send('Produto não encontrado');
+            return res.status(404).send('Produto não encontrado na base de dados.');
         }
 
-        // Supondo que você já tenha a quantidade em algum lugar
-        const quantidade = produto.quantidade || 1; // Ajuste isso conforme a lógica de seu projeto
+        // Usa a quantidade do carrinho para calcular o preço total
+        const quantidade = produtoCarrinho.quantidade; // Quantidade correta do carrinho
         const precoTotal = produto.preco * quantidade;
 
-        // Passa o preço total para o template
+        // Passa o preço total e a quantidade para o template
         res.render('comprar', { produto, precoTotal, quantidade });
     } catch (error) {
         console.error('Erro ao buscar produto:', error);
