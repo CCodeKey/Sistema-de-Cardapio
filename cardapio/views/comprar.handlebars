@@ -2,7 +2,7 @@
     <!-- Seção de Título Principal -->
     <div class="row">
         <div class="col">
-            <h1 class="text-center">Comprar</h1>
+            <h1 class="text-center">Compra</h1>
         </div>
     </div>
 
@@ -12,10 +12,32 @@
             <h2>Produto</h2>
             <p><strong>Nome:</strong> {{produto.nome}}</p>
             <p><strong>Descrição:</strong> {{produto.descricao}}</p>
-            <p><strong>Preço Total:</strong> R$ {{precoTotal}}</p>
-            <p><strong>Quantidade:</strong> {{quantidade}}</p>
+            <p><strong>Quantidade:</strong>
+                <button onclick="alterarQuantidade(-1)" class="btn btn-secondary btn-sm">-</button>
+                <span id="quantidade">{{quantidade}}</span>
+                <button onclick="alterarQuantidade(1)" class="btn btn-secondary btn-sm">+</button>
+            </p>
+
+            <p><strong>Preço Total:</strong> R$ <span id="precoTotal">{{precoTotal}}</span></p>
         </div>
     </div>
+
+    <script>
+        let quantidade = {{ quantidade }};
+        const precoUnitario = {{ produto.preco }};
+
+        function alterarQuantidade(valor) {
+            // Atualiza a quantidade, garantindo que ela não seja menor que 1
+            quantidade = Math.max(1, quantidade + valor);
+
+            // Atualiza o valor exibido na página
+            document.getElementById("quantidade").textContent = quantidade;
+
+            // Calcula o novo preço total
+            const precoTotal = (quantidade * precoUnitario).toFixed(2);
+            document.getElementById("precoTotal").textContent = precoTotal;
+        }
+    </script>
 
     <!-- Seção de Informações do Comprador -->
     <div class="row py-5">
@@ -28,7 +50,7 @@
         </div>
         <div class="col-md-6">
             <label for="cpf" class="form-label">CPF</label>
-            <input type="text" id="cpf" class="form-control" placeholder="Informe seu CPF" maxlength="11">
+            <input type="number" id="cpf" class="form-control" placeholder="Informe seu CPF" maxlength="11">
         </div>
     </div>
 
@@ -47,7 +69,7 @@
         </div>
         <div class="col-md-6">
             <label for="numero" class="form-label">Número da casa</label>
-            <input type="text" id="numero" class="form-control" placeholder="Informe o número da sua casa">
+            <input type="number" id="numero" class="form-control" placeholder="Informe o número da sua casa">
         </div>
         <div class="col-md-6">
             <label for="complemento" class="form-label">Complemento</label>
@@ -63,14 +85,14 @@
                 <input type="checkbox" class="form-check-input" id="pagamento-pix">
                 <label class="form-check-label" for="pagamento-pix">Pix</label>
             </div>
-            <div class="form-check">
+            {{!-- <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="pagamento-cartao">
                 <label class="form-check-label" for="pagamento-cartao">Cartão de Crédito</label>
             </div>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="pagamento-boleto">
                 <label class="form-check-label" for="pagamento-boleto">Boleto</label>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

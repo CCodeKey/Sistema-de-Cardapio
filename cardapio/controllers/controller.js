@@ -12,7 +12,7 @@ export async function home(req, res) {
 };
 
 export async function homeAdm(req, res) {
-    res.render('homeAdministrator'); 
+    res.render('homeAdministrator');
 };
 
 export async function renderProduto(req, res) {
@@ -156,4 +156,31 @@ export async function comprar(req, res) {
         console.error('Erro ao buscar produto:', error);
         res.status(500).send('Erro ao buscar produto');
     }
+}
+
+export function atualizarQuantidade(req, res) {
+    const { id, action } = req.body;
+
+    // Verifica se o carrinho está na sessão
+    if (!req.session.carrinho) {
+        return res.status(400).send('Carrinho não encontrado.');
+    }
+
+    // Encontra o produto no carrinho
+    const produto = req.session.carrinho.find(item => item.id === id);
+    if (!produto) {
+        return res.status(404).send('Produto não encontrado no carrinho.');
+    }
+
+    // Atualiza a quantidade com base na ação
+    if (action === 'increase') {
+        produto.quantidade += 1;  // Aumenta a quantidade
+    } else if (action === 'decrease') {
+        if (produto.quantidade > 1) {
+            produto.quantidade -= 1;  // Diminui a quantidade, garantindo que não fique abaixo de 1
+        }
+    }
+
+    // Redireciona de volta para a página do carrinho
+    res.redirect('/carrinho');
 }

@@ -7,7 +7,18 @@
             <strong>Nome:</strong> {{this.nome}} <br>
             <strong>Preço:</strong> R$ {{this.preco}} <br>
             <strong>Descrição:</strong> {{this.descricao}} <br>
-            <strong>Quantidade:</strong> {{this.quantidade}} <br>
+            <strong>Quantidade:</strong>
+            <div class="d-flex align-items-center">
+                <form action="/carrinho/atualizarQuantidade" method="POST" class="d-inline">
+                    <input type="hidden" name="id" value="{{this.id}}">
+                    <button type="submit" name="action" value="decrease" class="btn btn-secondary">-</button>
+                </form>
+                <span class="mx-2">{{this.quantidade}}</span>
+                <form action="/carrinho/atualizarQuantidade" method="POST" class="d-inline">
+                    <input type="hidden" name="id" value="{{this.id}}">
+                    <button type="submit" name="action" value="increase" class="btn btn-secondary">+</button>
+                </form>
+            </div>
             <button class="btn btn-primary mt-2">
                 <a href="/comprar/{{this.id}}" class="text-white text-decoration-none">Comprar</a>
             </button>
