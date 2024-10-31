@@ -1,0 +1,22 @@
+<div class="container py-5">
+    <h1 class="row">{{produto.nome}}</h1>
+    <ul class="row">
+        <li class="col-12 my-3">
+            <strong>Nome:</strong> {{produto.nome}} <br>
+            <strong>Preço:</strong> R$ {{produto.preco}} <br>
+            <strong>Descrição:</strong> {{produto.descricao}} <br>
+            <strong>Quantidade:</strong> {{produto.quantidade}} <br>
+            <button class="btn btn-primary mt-2">
+            <a href="/comprar/{{produto.id}}" class="text-white text-decoration-none">Fazer pedido</a>
+            </button>
+            <form action="/carrinho/adicionarNoCarrinho" method="POST">
+            <input type="hidden" name="id" value="{{produto.id}}">
+                <input type="hidden" name="nome" value="{{produto.nome}}">
+                <input type="hidden" name="preco" value="{{produto.preco}}">
+                <input type="hidden" name="descricao" value="{{produto.descricao}}"> 
+                <input type="hidden" name="quantidade" value="1">
+                <button type="submit" class="btn btn-success">Adicionar ao Carrinho</button>
+            </form>
+        </li>
+    </ul>
+</div>

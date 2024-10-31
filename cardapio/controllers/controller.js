@@ -11,6 +11,25 @@ export async function home(req, res) {
     }
 };
 
+export async function homeAdm(req, res) {
+    res.render('homeAdministrator'); 
+};
+
+export async function renderProduto(req, res) {
+    const { id } = req.params;
+    try {
+        const result = await pool.query('SELECT * FROM produtos WHERE id = $1', [id]);
+        const produto = result.rows[0];
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado');
+        }
+        res.render('telaProduto', { produto });
+    } catch (error) {
+        console.error('Erro ao buscar produto:', error);
+        res.status(500).send('Erro ao buscar produto');
+    }
+};
+
 export function adicionarNoCarrinho(req, res) {
     const { id, nome, preco, descricao, quantidade } = req.body;
 

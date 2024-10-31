@@ -10,8 +10,9 @@
                 <input type="hidden" name="id" value="{{this.id}}">
                 <input type="hidden" name="nome" value="{{this.nome}}">
                 <input type="hidden" name="preco" value="{{this.preco}}">
-                <input type="hidden" name="descricao" value="{{this.descricao}}">
+                <input type="hidden" name="descricao" value="{{this.descricao}}"> 
                 <input type="hidden" name="quantidade" value="1">
+                <a href="/produto/{{this.id}}" class="btn btn-success">Ver</a>
                 <button type="submit" class="btn btn-success">Adicionar ao Carrinho</button>
             </form>
         </li>
