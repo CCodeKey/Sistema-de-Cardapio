@@ -174,26 +174,22 @@ export async function comprar(req, res) {
 export function atualizarQuantidade(req, res) {
     const { id, action } = req.body;
 
-    // Verifica se o carrinho está na sessão
     if (!req.session.carrinho) {
         return res.status(400).send('Carrinho não encontrado.');
     }
 
-    // Encontra o produto no carrinho
-    const produto = req.session.carrinho.find(item => item.id === id);
-    if (!produto) {
+    const produtoCarrinho = req.session.carrinho.find(item => item.id === id);
+    if (!produtoCarrinho) {
         return res.status(404).send('Produto não encontrado no carrinho.');
     }
 
-    // Atualiza a quantidade com base na ação
     if (action === 'increase') {
-        produto.quantidade += 1;  // Aumenta a quantidade
-    } else if (action === 'decrease') {
-        if (produto.quantidade > 1) {
-            produto.quantidade -= 1;  // Diminui a quantidade, garantindo que não fique abaixo de 1
-        }
+        produtoCarrinho.quantidade = parseInt(produtoCarrinho.quantidade) + 1; // Aumenta a quantidade corretamente
+    } else if (action === 'decrease' && produtoCarrinho.quantidade > 1) {
+        produtoCarrinho.quantidade = parseInt(produtoCarrinho.quantidade) - 1; // Diminui a quantidade, mas não abaixo de 1
     }
 
-    // Redireciona de volta para a página do carrinho
+    console.log('Carrinho atualizado:', req.session.carrinho);
     res.redirect('/carrinho');
 }
+
