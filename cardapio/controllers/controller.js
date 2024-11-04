@@ -79,7 +79,7 @@ export async function adicionarItem(req, res) {
         );
         console.log('Item adicionado:', result.rows[0]);
         // res.status(201).send('Produto adicionado com sucesso!');
-        res.redirect('/')
+        res.redirect('/administrator/p/produtos')
     } catch (error) {
         console.error('Erro ao adicionar item:', error);
         res.status(500).send('Erro ao adicionar item');
@@ -112,7 +112,7 @@ export async function editarItem(req, res) {
 
     try {
         await pool.query('UPDATE produtos SET nome = $1, preco = $2, descricao = $3 WHERE id = $4', [nome, preco, descricao, id]);
-        res.redirect('/'); // Redireciona após a edição
+        res.redirect('/administrator/p/produtos'); // Redireciona após a edição
     } catch (error) {
         console.error('Erro ao atualizar item:', error);
         res.status(500).send('Erro no servidor');
@@ -136,7 +136,7 @@ export async function deletarItem(req, res) {
         }
 
         // Redireciona após a exclusão
-        res.redirect('/'); // Você pode adicionar uma mensagem de sucesso se desejar
+        res.redirect('/administrator/p/produtos'); // Você pode adicionar uma mensagem de sucesso se desejar
     } catch (error) {
         console.error('Erro ao deletar item:', error);
         res.status(500).send('Erro no servidor');

@@ -1,21 +1,3 @@
-{{!-- 
-<form action="/administrator/adicionar" method="POST">
-    <div class="mb-3">
-        <label for="nome" class="form-label">Nome do Produto:</label>
-        <input type="text" id="nome" name="nome" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label for="preco" class="form-label">Preço:</label>
-        <input type="number" id="preco" name="preco" step="0.01" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label for="descricao" class="form-label">Descrição:</label>
-        <textarea id="descricao" name="descricao" class="form-control" required></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Adicionar Produto</button>
-</form> --}}
-
-
 <title>Produtos</title>
 <head>
     <style>
@@ -45,9 +27,6 @@
 </head>
 <body>
   <div class="container-fluid">
-    <!-- Botão para abrir a Side Bar -->
-
-    <!-- Side Bar -->
     <nav id="sidebar" class="sidebar">
       <ul class="nav flex-column">
         <li class="nav-item">
@@ -59,92 +38,128 @@
       </ul>
     </nav>
 
-     <!-- Conteúdo Principal -->
     <main id="mainContent" class="content">
       <div class="container">
-        <button id="toggleSidebar" class="btn btn-primary mt-3">☰></button>
+        <button id="toggleSidebar" class="btn btn-primary">☰></button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novoProduto">Novo produto</button>
+        <form action="/administrator/p/adicionar" method="POST">
+            <div class="modal fade" id="novoProduto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel"> Novo Produto</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="nome" class="form-label">Nome do Produto:</label>
+                                <input type="text" id="nome" name="nome" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="preco" class="form-label">Preço:</label>
+                                <input type="number" id="preco" name="preco" step="0.01" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="descricao" class="form-label">Descrição:</label>
+                                <textarea id="descricao" name="descricao" class="form-control" required></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">fechar</button>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
       <table class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>
+                <th scope="col">Imagem</th>
                 <th scope="col">Nome</th>
                 <th scope="col">Preço</th>
                 <th scope="col">Descrição</th>
-                <th scope="col"></th>
+                <th scope="col"></th>     
             </tr>
         </thead>
         <tbody>
             {{#each produtos}}
-            <tr>
+            <tr>    
+                
                 <th scope="row">{{this.id}}</th>
+                <td></td>
                 <td>{{this.nome}}</td>
                 <td>{{this.preco}}</td>
                 <td>{{this.descricao}}</td>
-                <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Editar</button></td>                       
-                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">{{this.nome}}</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
+                <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editar-{{this.id}}">editar</button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#excluir-{{this.id}}">excluir</button></td>
 
-
-                        <div class="mb-3">
-                            <label for="nome" class="form-label">Nome do Produto:</label>
-                            <input type="text" id="nome" name="nome" class="form-control" value="{{produto.nome}}" required>
+                <form action="/administrator/p/atualizar/{{this.id}}" method="POST">  
+                    <div class="modal fade" id="editar-{{this.id}}" data-bs-backdrop="static" data-bs-keyboard="true" aria-labelledby="staticBackdropLabel">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">{{this.nome}}</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="nome" class="form-label">Nome do Produto:</label>
+                                        <input type="text" id="nome" name="nome" class="form-control" value="{{this.nome}}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="preco" class="form-label">Preço:</label>
+                                        <input type="number" id="preco" name="preco" class="form-control" value="{{this.preco}}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="descricao" class="form-label">Descrição:</label>
+                                        <textarea id="descricao" name="descricao" class="form-control" required>{{this.descricao}}</textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">fechar</button>
+                                    <button type="submit" class="btn btn-primary">atualizar</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="preco" class="form-label">Preço:</label>
-                            <input type="number" id="preco" name="preco" class="form-control" value="{{produto.preco}}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="descricao" class="form-label">Descrição:</label>
-                            <textarea id="descricao" name="descricao" class="form-control" required>{{produto.descricao}}</textarea>
-                        </div>
+                    </div>
+                </form>
 
 
+                <form action="/administrator/p/remover/{{this.id}}" method="GET">  
+                    <div class="modal fade" id="excluir-{{this.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Tem certeza que deseja excluir o produto:</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h3>{{this.nome}}</h3>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">fechar</button>
+                            <button type="submit" class="btn btn-primary">excluir</button>
+                        </div>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">excluir</button>
-                        <button type="button" class="btn btn-primary">atualizar</button>
                     </div>
-                    </div>
-                </div>
-                </div>
+                </form>
+
+
+
+
+             
             </tr>
             {{/each}}
         </tbody>
         </table>
-
-
       </div>
     </main>
-
-
 <script>
-    // JavaScript para alternar a Side Bar
     document.getElementById('toggleSidebar').addEventListener('click', function () {
         document.getElementById('sidebar').classList.toggle('active');
         document.getElementById('mainContent').classList.toggle('active');
     });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

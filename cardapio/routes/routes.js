@@ -12,8 +12,7 @@ router.get('/comprar/:id', controller.comprar);
 // Adminitrador
 router.get('/administrator/p/home', controller.homeAdm);
 router.get('/administrator/p/produtos', controller.renderAdicionarProduto);  // Rota GET para exibir o formulário
-// router.post('/administrator/p/adicionar', controller.adicionarItem);
-router.get('/administrator/p/atualizar/:id', controller.renderEditarProduto);  // Rota POST para adicionar o produto
+router.post('/administrator/p/adicionar', controller.adicionarItem);
 router.post('/administrator/p/atualizar/:id', controller.editarItem);
 router.get('/administrator/p/remover/:id', controller.deletarItem);
 router.post('/carrinho/atualizarQuantidade', controller.atualizarQuantidade);
