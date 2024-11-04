@@ -12,7 +12,7 @@ export async function home(req, res) {
 };
 
 export async function homeAdm(req, res) {
-    res.render('homeAdministrator');
+    res.render('homeAdministrator', { hideBody: true });
 };
 
 export async function renderProduto(req, res) {
@@ -59,8 +59,15 @@ export function carrinho(req, res) {
     res.render('carrinho', { carrinho });
 };
 
-export function renderAdicionarProduto(req, res) {
-    res.render('adicionarProduto');
+export async function renderAdicionarProduto(req, res) {
+    try {
+        const result = await pool.query('SELECT * FROM produtos');
+        const produtos = result.rows;  // Armazena os produtos na variável cardapio
+        res.render('adicionarProduto', { produtos });
+    } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+        res.status(500).send('Erro ao buscar produtos');
+    }
 };
 
 export async function adicionarItem(req, res) {

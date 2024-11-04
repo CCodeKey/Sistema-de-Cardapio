@@ -1,1 +1,73 @@
-<h1>Tela do ADM</h1>
+{{!-- <ul class="list-group">
+  <li class="list-group-item">An item</li>
+  <li class="list-group-item">A second item</li>
+  <li class="list-group-item">A third item</li>
+  <li class="list-group-item">A fourth item</li>
+  <li class="list-group-item">And a fifth one</li>
+</ul> listagem de produtos --}} 
+
+{{!-- <ul class="nav flex-column">
+  <li class="nav-item">
+    <a class="nav-link" href="/administrator/p/home">Produto</a>
+  </li>
+</ul>
+
+<h2>oi</h2> --}}
+
+<head>
+    <style>
+        /* Estilos para a Side Bar */
+        .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: -250px; /* Oculta inicialmente */
+        background-color: #ffffff;
+        transition: left 0.3s ease;
+        padding-top: 20px;
+        z-index: 1050;
+        }
+        .sidebar.active {
+        left: 0; /* Mostra a Side Bar */
+        }
+        .content {
+        margin-left: 0;
+        transition: margin-left 0.3s ease;
+        }
+        .content.active {
+        margin-left: 250px; /* Ajusta o conteúdo ao mostrar a Side Bar */
+        }
+    </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <!-- Botão para abrir a Side Bar -->
+    <!-- Side Bar -->
+    <nav id="sidebar" class="sidebar">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="/administrator/p/home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/administrator/p/produtos">Produtos</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main id="mainContent" class="content">
+      <div class="container">
+        <button id="toggleSidebar" class="btn btn-primary mt-3">☰></button>
+        <h1>Bem-vindo!</h1>
+        <p>Esta é a página do Administrador do Sistema</p>
+      </div>
+    </main>
+  </div>
+<script>
+    // JavaScript para alternar a Side Bar
+    document.getElementById('toggleSidebar').addEventListener('click', function () {
+      document.getElementById('sidebar').classList.toggle('active');
+      document.getElementById('mainContent').classList.toggle('active');
+    });
+</script>
