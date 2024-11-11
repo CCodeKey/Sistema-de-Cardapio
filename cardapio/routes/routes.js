@@ -7,7 +7,13 @@ router.get('/', controller.home);
 router.get('/produto/:id', controller.renderProduto);
 router.get('/carrinho', controller.carrinho);
 router.post('/carrinho/adicionarNoCarrinho', controller.adicionarNoCarrinho);
+
+// Compra do produto
 router.get('/comprar/:id', controller.comprar);
+router.get('/comprar/:id/endereco', controller.comprarEndereco);
+router.get('/comprar/:id/pagamento', controller.comprarPagamento);
+router.get('/comprar/:id/confirmar', controller.comprarConfirmar);
+router.get('/comprar/:id/fim', controller.fimCompra);
 
 // Adminitrador
 router.get('/administrator/p/home', controller.homeAdm);

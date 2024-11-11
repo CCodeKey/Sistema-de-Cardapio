@@ -1,0 +1,27 @@
+<!-- Seção de Endereço -->
+<div class="container py-5">
+    <h2 class="mb-4">Endereço</h2>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <label for="rua" class="form-label">Rua</label>
+            <input type="text" id="rua" class="form-control" placeholder="Nome da sua rua" required>
+        </div>
+        <div class="col-md-6">
+            <label for="bairro" class="form-label">Bairro</label>
+            <input type="text" id="bairro" class="form-control" placeholder="Nome do seu bairro" required>
+        </div>
+        <div class="col-md-6">
+            <label for="numero" class="form-label">Número da casa</label>
+            <input type="number" id="numero" class="form-control" placeholder="Informe o número da sua casa" required>
+        </div>
+        <div class="col-md-6">
+            <label for="complemento" class="form-label">Complemento</label>
+            <input type="text" id="complemento" class="form-control" placeholder="Casa, apartamento, etc.">
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12 text-end">
+            <a href="/comprar/{{ produto.id }}/pagamento" class="btn btn-primary">Próximo</a>
+        </div>
+    </div>
+</div>

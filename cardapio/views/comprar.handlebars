@@ -44,55 +44,30 @@
         <div class="col-12">
             <h2>Informações do Comprador</h2>
         </div>
-        <div class="col-md-6">
-            <label for="nome" class="form-label">Nome completo</label>
-            <input type="text" id="nome" class="form-control" placeholder="Informe seu nome completo">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="nome" class="form-label">Nome completo</label>
+                <input type="text" id="nome" class="form-control" placeholder="Informe seu nome completo">
+            </div>
+            <div class="col-md-6">
+                <label for="cpf" class="form-label">CPF</label>
+                <input type="number" id="cpf" class="form-control" placeholder="Informe seu CPF" maxlength="11">
+            </div>
         </div>
-        <div class="col-md-6">
-            <label for="cpf" class="form-label">CPF</label>
-            <input type="number" id="cpf" class="form-control" placeholder="Informe seu CPF" maxlength="11">
+        <div class="row py-2">
+            <div class="col-md-6">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" id="email" class="form-control" placeholder="Informe seu e-mail">
+            </div>
+            <div class="col-md-6">
+                <label for="telefone" class="form-label">Telefone</label>
+                <input type="number" id="telefone" class="form-control" placeholder="Informe seu telefone">
+            </div>
         </div>
     </div>
-
-    <!-- Seção de Endereço -->
-    <div class="row py-5">
-        <div class="col-12">
-            <h2>Endereço</h2>
-        </div>
-        <div class="col-md-6">
-            <label for="rua" class="form-label">Rua</label>
-            <input type="text" id="rua" class="form-control" placeholder="Nome da sua rua">
-        </div>
-        <div class="col-md-6">
-            <label for="bairro" class="form-label">Bairro</label>
-            <input type="text" id="bairro" class="form-control" placeholder="Nome do seu bairro">
-        </div>
-        <div class="col-md-6">
-            <label for="numero" class="form-label">Número da casa</label>
-            <input type="number" id="numero" class="form-control" placeholder="Informe o número da sua casa">
-        </div>
-        <div class="col-md-6">
-            <label for="complemento" class="form-label">Complemento</label>
-            <input type="text" id="complemento" class="form-control" placeholder="Casa, apartamento, etc.">
-        </div>
-    </div>
-
-    <!-- Seção de Forma de Pagamento -->
-    <div class="row py-5">
-        <div class="col">
-            <h2>Forma de Pagamento</h2>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="pagamento-pix">
-                <label class="form-check-label" for="pagamento-pix">Pix</label>
-            </div>
-            {{!-- <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="pagamento-cartao">
-                <label class="form-check-label" for="pagamento-cartao">Cartão de Crédito</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="pagamento-boleto">
-                <label class="form-check-label" for="pagamento-boleto">Boleto</label>
-            </div> --}}
+    <div class="row mt-4">
+        <div class="col-12 text-end">
+            <a href="/comprar/{{produto.id}}/endereco" class="btn btn-primary">Próximo</a>
         </div>
     </div>
 </div>

@@ -14,7 +14,10 @@ const app = express();
 
 // Configurando o Handlebars como template engine
 app.engine('handlebars', engine({
-    defaultLayout: 'main'
+    defaultLayout: 'main',
+    helpers: {
+        isPix: (pagamento) => pagamento === 'pix' ? 'Pix' : 'Outro'
+    }
 }));
 app.set('view engine', 'handlebars');
 app.set('views', path.join('./', 'views'));

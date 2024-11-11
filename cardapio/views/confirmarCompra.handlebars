@@ -1,0 +1,65 @@
+<div class="container py-5">
+    <!-- Seção de Título Principal -->
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center mb-4">Confirmar Informações</h1>
+        </div>
+    </div>
+
+    <!-- Seção de Informações do Produto -->
+    <div class="row py-5">
+        <div class="col-12">
+            <h2>Produto</h2>
+            <p><strong>Nome:</strong> {{produto.nome}}</p>
+            <p><strong>Descrição:</strong> {{produto.descricao}}</p>
+            <p><strong>Quantidade:</strong> <span id="quantidade">{{quantidade}}</span></p>
+            <p><strong>Preço Total:</strong> R$ <span id="precoTotal">{{precoTotal}}</span></p>
+        </div>
+    </div>
+
+    <script>
+        let quantidade = {{ quantidade }};
+        const precoUnitario = {{ produto.preco }};
+
+        function alterarQuantidade(valor) {
+            quantidade = Math.max(1, quantidade + valor);
+            document.getElementById("quantidade").textContent = quantidade;
+            const precoTotal = (quantidade * precoUnitario).toFixed(2);
+            document.getElementById("precoTotal").textContent = precoTotal;
+        }
+    </script>
+
+    <!-- Seção de Informações do Comprador -->
+    <div class="row py-5">
+        <div class="col-12">
+            <h2>Informações do Comprador</h2>
+            <p><strong>Nome Completo:</strong> <span id="nomeCompleto">{{nome}}</span></p>
+            <p><strong>CPF:</strong> <span id="cpf">{{cpf}}</span></p>
+        </div>
+    </div>
+
+    <!-- Seção de Endereço -->
+    <div class="row py-5">
+        <div class="col-12">
+            <h2>Endereço</h2>
+            <p><strong>Rua:</strong> <span id="rua">{{rua}}</span></p>
+            <p><strong>Bairro:</strong> <span id="bairro">{{bairro}}</span></p>
+            <p><strong>Número:</strong> <span id="numero">{{numero}}</span></p>
+            <p><strong>Complemento:</strong> <span id="complemento">{{complemento}}</span></p>
+        </div>
+    </div>
+
+    <!-- Seção de Forma de Pagamento -->
+    <div class="row py-5">
+        <div class="col-12">
+            <h2>Forma de Pagamento</h2>
+            <p><strong>Pagamento:</strong> <span id="pagamento">{{isPix pagamento}}</span></p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 text-end">
+            <a href="/comprar/{{produto.id}}/fim" class="btn btn-primary">Finalizar</a>
+        </div>
+    </div>
+</div>

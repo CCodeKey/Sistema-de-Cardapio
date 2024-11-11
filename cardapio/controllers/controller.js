@@ -171,6 +171,22 @@ export async function comprar(req, res) {
     }
 }
 
+export function comprarEndereco(req, res) {
+    res.render('endereco', { produto: { id: req.params.id } });
+}
+
+export function comprarPagamento(req, res) {
+    res.render('pagamento', { produto: { id: req.params.id } });
+}
+
+export function comprarConfirmar(req, res) {
+    res.render('confirmarCompra', { produto: { id: req.params.id } });
+}
+
+export function fimCompra(req, res) {
+    res.render('fimCompra');
+}
+
 export function atualizarQuantidade(req, res) {
     const { id, action } = req.body;
 
@@ -192,4 +208,3 @@ export function atualizarQuantidade(req, res) {
     console.log('Carrinho atualizado:', req.session.carrinho);
     res.redirect('/carrinho');
 }
-
