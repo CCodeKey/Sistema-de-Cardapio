@@ -1,1 +1,12 @@
-# Projeto de Cardapio online desenvolvido com Node.js e Postgres
+# Cardápio
+
+---
+
+1. Instalar as dependências
+```bash
+npm install
+```
+npm install method-override
+
+```
+JSON:
