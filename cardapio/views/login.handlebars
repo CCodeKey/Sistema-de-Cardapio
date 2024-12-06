@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            width: 300px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-container input[type="text"],
+        .form-container input[type="email"],
+        .form-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-container .password-container {
+            position: relative;
+        }
+        .form-container .password-container input {
+            width: calc(100% - 40px);
+        }
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background: #4caf50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background: #45a049;
+        }
+        .form-container p {
+            text-align: center;
+            margin-top: 10px;
+            color: #555;
+        }
+        .form-container a {
+            color: #4caf50;
+            text-decoration: none;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin: 5px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="email" name="email" placeholder="Email" required>
+            <div class="error" id="emailError">Por favor, insira um e-mail válido.</div>
+            <div class="password-container">
+                <input type="password" name="password" placeholder="Password" required id="passwordInput">
+                <span class="password-toggle" id="togglePassword">🫣</span>
+            </div>
+            <div class="error" id="passwordError">
+                A senha deve ter pelo menos 9 caracteres, incluir letras maiúsculas e minúsculas, números e símbolos.
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p>Não tem uma conta? <a href="/n/signup">Sign Up</a></p>
+    </div>
+
+<script>
+        // Alternar visibilidade da senha
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('passwordInput');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            this.textContent = type === 'password' ? '🫣' : '😃';
+        });
+
+        // Lógica de envio do formulário com validação e token
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = this.elements['email'].value;
+            const password = this.elements['password'].value;
+
+            // Validação do e-mail
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailValid = emailPattern.test(email);
+            const emailError = document.getElementById('emailError');
+            emailError.style.display = emailValid ? 'none' : 'block';
+
+            // Validação da senha
+            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{9,}$/;
+            const passwordValid = passwordPattern.test(password);
+            const passwordError = document.getElementById('passwordError');
+            passwordError.style.display = passwordValid ? 'none' : 'block';
+
+            // Envio do formulário se as validações forem bem-sucedidas
+            if (emailValid && passwordValid) {
+                try {
+                    const response = await fetch('/v/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    // console.log("1 - response - ",response);
+                    // alert("proximo>");
+                    if (response.ok) {
+                        const data = await response.json();       
+                        // console.log("2 - data - ", data);
+                        // alert("proximo>");          
+                        localStorage.setItem('token', data.token); // Salva o token no localStorage
+                        acessarAreaAdministrativa(); 
+
+                    } else {
+                        alert('Credenciais inválidas.');
+                    }
+
+                } catch (error) {
+                    console.error('Erro ao realizar login:', error);
+                }
+            }
+        });
+
+        async function acessarAreaAdministrativa() {
+            const token = localStorage.getItem('token'); // Recupera o token armazenado
+            // console.log("3 - token - ", token);
+            // alert("proximo>");
+            if (!token) {
+                alert('Você precisa estar logado como administrador.');
+                window.location.href = '/v/login';
+                return;
+            }
+
+            try {
+                const response = await fetch('/administrator/p/home', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Envia o token no cabeçalho
+                    },
+                    credentials: 'include',
+                });
+
+                // console.log("4 - response - ", response);
+                // alert("proximo>");
+
+                if (response.ok) {
+                    alert('Login bem-sucedido!');
+                    document.cookie = `Authorization=Bearer ${token}; path=/; secure;`;
+                    // console.log("5 - document.cookie - ", document.cookie);
+                    // alert("proximo>");
+                    window.location.href = '/administrator/p/home';
+
+
+                } else {
+                    alert('Acesso negado. Verifique suas credenciais.');
+                    window.location.href = '/v/login';
+                }
+            } catch (error) {
+                console.error('Erro ao acessar a área administrativa:', error);
+            }
+        }
+
+
+        async function efetuarLogout() {
+            try {
+                const response = await fetch('/logout', {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    alert('Logout realizado com sucesso!');
+                    window.location.href = '/v/login'; // Redireciona para a página de login
+                } else {
+                    alert('Erro ao realizar logout.');
+                }
+            } catch (error) {
+                console.error('Erro ao efetuar logout:', error);
+            }
+        }
+
+    </script>
+
+
+</body>
+</html>

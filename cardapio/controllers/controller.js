@@ -1,10 +1,88 @@
 import pool from '../database/db.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import 'dotenv/config';
+
+export async function renderLogin(req, res) {
+    res.render('login', {showNavbar: false});
+};
+
+export async function login(req, res) {
+    const { email, password } = req.body;
+
+    try {
+        // Verifica o usuário no banco de dados
+        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        const user = result.rows[0]; // Acessa o primeiro usuário retornado
+
+        if (!user) {
+            return res.status(401).send('Credenciais inválidas.');
+        }
+
+        // Compara a senha informada com a senha armazenada no banco de dados
+        const isPasswordValid = bcrypt.compareSync(password, user.password);
+        if (!isPasswordValid) {
+            return res.redirect('/v/login');
+        }
+        
+        const secretKey = process.env.SECRET_KEY;
+        // Gera o token JWT com o papel do usuário
+        const token = jwt.sign({ id: user.id, role: user.role }, secretKey, { expiresIn: '2h' });
+        
+        res.cookie('Authorization', token, {
+            httpOnly: true,        // Garante que o cookie só seja acessado pelo servidor
+            secure: process.env.NODE_ENV === 'production',  // Só usa em produção com HTTPS
+            sameSite: 'None',      // Permite o envio do cookie em diferentes domínios
+            maxAge: 3600000        // Expiração do cookie (1 hora)
+        });
+
+        // res.redirect('/administrator/p/home');
+        res.send({ token });
+        
+    } catch (error) {
+        console.error('Erro no login:', error);
+        res.status(500).send('Erro no servidor.');
+    }
+}
+
+export async function renderSignup(req, res) {
+    res.render('signUp', {showNavbar: false} );
+};
+
+export async function signup(req, res) {
+    const { username, email, password, role } = req.body;
+
+    try {
+        // Verifica se o usuário ou e-mail já está em uso
+        const existingUser = await pool.query(
+            'SELECT * FROM users WHERE email = $1',
+            [email]
+        );
+        if (existingUser.rows.length > 0) {
+            return res.status(400).send('Esse e-mail já está em uso.');
+        }
+
+        // Faz o hash da senha
+        const hashedPassword = bcrypt.hashSync(password, 10);
+
+        // Insere o novo usuário no banco de dados
+        const result = await pool.query(
+            'INSERT INTO users (username, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *',
+            [username, email, hashedPassword, role || 'admin']
+        );
+
+        res.redirect('/v/login');
+    } catch (error) {
+        console.error('Erro no signup:', error);
+        res.status(500).send('Erro no servidor.', error);
+    }
+}
 
 export async function home(req, res) {
     try {
         const result = await pool.query('SELECT * FROM produtos');
         const cardapio = result.rows;  // Armazena os produtos na variável cardapio
-        res.render('index', { cardapio });  // Passa os produtos para o template
+        res.render('index', { cardapio, showNavbar: true });  // Passa os produtos para o template
     } catch (error) {
         console.error('Erro ao buscar produtos:', error);
         res.status(500).send('Erro ao buscar produtos');
@@ -12,7 +90,23 @@ export async function home(req, res) {
 };
 
 export async function homeAdm(req, res) {
-    res.render('homeAdministrator', { hideBody: true });
+    // try {
+    //     const num = await pool.query('SELECT COUNT(*) AS quantidade_produtos FROM produtos;');
+    //     const produto = num.rows[0];
+    //     if (!produto) {
+    //         return res.status(404).send('Produto não encontrado');
+    //     }
+    // } catch (error) {
+    //     console.error('Erro ao buscar o numero dos produtos:', error);
+    //     res.status(500).send('Erro ao buscar o numero dos produtos');
+    // }
+
+
+    // VER ISSO DPS - Eu to tentando mostrar na tela do ADM o numero COUNT total de produtos mas tem um bug
+    res.render('homeAdministrator', {showNavbar: false});
+    
+    
+
 };
 
 export async function renderProduto(req, res) {
@@ -63,7 +157,7 @@ export async function renderAdicionarProduto(req, res) {
     try {
         const result = await pool.query('SELECT * FROM produtos');
         const produtos = result.rows;  // Armazena os produtos na variável cardapio
-        res.render('adicionarProduto', { produtos });
+        res.render('adicionarProduto', { produtos, showNavbar: false });
     } catch (error) {
         console.error('Erro ao buscar produtos:', error);
         res.status(500).send('Erro ao buscar produtos');
@@ -72,14 +166,21 @@ export async function renderAdicionarProduto(req, res) {
 
 export async function adicionarItem(req, res) {
     const { nome, preco, descricao } = req.body;
+    const imagem = req.file ? `/uploads/${req.file.filename}` : null; // Caminho da imagem
+
+    if (!nome || !preco || !descricao) {
+        return res.status(400).send('Campos obrigatórios estão faltando');
+    }
+    if (!req.file) {
+        return res.status(400).send('Imagem não enviada');
+    }    
     try {
         const result = await pool.query(
-            'INSERT INTO produtos (nome, preco, descricao) VALUES ($1, $2, $3) RETURNING *',
-            [nome, preco, descricao]
+            'INSERT INTO produtos (nome, preco, descricao, imagem) VALUES ($1, $2, $3, $4) RETURNING *',
+            [nome, preco, descricao, imagem]
         );
         console.log('Item adicionado:', result.rows[0]);
-        // res.status(201).send('Produto adicionado com sucesso!');
-        res.redirect('/administrator/p/produtos')
+        res.redirect('/administrator/p/produtos'); // Redireciona após a adição do produto
     } catch (error) {
         console.error('Erro ao adicionar item:', error);
         res.status(500).send('Erro ao adicionar item');

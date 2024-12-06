@@ -7,6 +7,7 @@
             <p>Preço: R$ {{this.preco}}</p>
             <p>{{this.descricao}}</p>
             <form action="/carrinho/adicionarNoCarrinho" method="POST">
+            <img src={{this.imagem}} alt="imagem" style="width: 100px; height: 100px;"></td>
                 <input type="hidden" name="id" value="{{this.id}}">
                 <input type="hidden" name="nome" value="{{this.nome}}">
                 <input type="hidden" name="preco" value="{{this.preco}}">

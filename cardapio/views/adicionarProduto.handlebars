@@ -30,6 +30,31 @@
             margin-left: 250px;
             /* Ajusta o conteúdo ao mostrar a Side Bar */
         }
+
+        .file_customizada::-webkit-file-upload-button {
+        visibility: hidden;
+        }
+        .file_customizada::before {
+        content: 'ddddSelect some files';
+        display: inline-block;
+        background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+        border: 1px solid #999;
+        border-radius: 3px;
+        padding: 5px 8px;
+        outline: none;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        cursor: pointer;
+        text-shadow: 1px 1px #fff;
+        font-weight: 700;
+        font-size: 10pt;
+        }
+        .file_customizada:hover::before {
+        border-color: black;
+        }
+        .file_customizada:active::before {
+        background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+        }
     </style>
 </head>
 
@@ -38,54 +63,61 @@
         <nav id="sidebar" class="sidebar">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/administrator/p/home">Home</a>
+                    <a class="nav-link active" href="/administrator/p/home">Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/administrator/p/produtos">Produtos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/administrator/p/home">Relatório</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="efetuarLogout()">Logout</a>
                 </li>
             </ul>
         </nav>
 
         <main id="mainContent" class="content">
             <div class="container">
-                <button id="toggleSidebar" class="btn btn-primary">☰></button>
+                <button id="toggleSidebar" class="btn btn-primary">☰</button>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novoProduto">Novo
                     produto</button>
-                <form action="/administrator/p/adicionar" method="POST">
-                    <div class="modal fade" id="novoProduto" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
+                <form action="/administrator/p/adicionar" method="POST" enctype="multipart/form-data">
+                    <div class="modal fade" id="novoProduto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel"> Novo Produto</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                    <h5 class="modal-title" id="exampleModalLabel">Adicionar Novo Produto</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="nome" class="form-label">Nome do Produto:</label>
-                                        <input type="text" id="nome" name="nome" class="form-control" required>
+                                    <div class="form-group">
+                                        <label for="nome">Nome</label>
+                                        <input type="text" name="nome" class="form-control" required>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="preco" class="form-label">Preço:</label>
-                                        <input type="number" id="preco" name="preco" step="0.01" class="form-control"
-                                            required>
+                                    <div class="form-group">
+                                        <label for="preco">Preço</label>
+                                        <input type="number" name="preco" class="form-control" required>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="descricao" class="form-label">Descrição:</label>
-                                        <textarea id="descricao" name="descricao" class="form-control"
-                                            required></textarea>
+                                    <div class="form-group">
+                                        <label for="descricao">Descrição</label>
+                                        <textarea name="descricao" class="form-control" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="imagem">Imagem</label>
+                                        <input type="file" name="imagem" class="form-control" accept="image/*">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">fechar</button>
-                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                    <button type="submit" class="btn btn-primary">Adicionar Produto</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
+
+
                 <table class="table">
                     <thead>
                         <tr>
@@ -100,9 +132,8 @@
                     <tbody>
                         {{#each produtos}}
                         <tr>
-
                             <th scope="row">{{this.id}}</th>
-                            <td></td>
+                            <td><img src={{this.imagem}} alt="imagem" style="width: 100px; height: 100px;"></td>
                             <td>{{this.nome}}</td>
                             <td>{{this.preco}}</td>
                             <td>{{this.descricao}}</td>
@@ -149,7 +180,6 @@
                                 </div>
                             </form>
 
-
                             <form action="/administrator/p/remover/{{this.id}}" method="GET">
                                 <div class="modal fade" id="excluir-{{this.id}}" tabindex="-1"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -174,10 +204,6 @@
                                 </div>
                             </form>
 
-
-
-
-
                         </tr>
                         {{/each}}
                     </tbody>
@@ -189,4 +215,21 @@
                 document.getElementById('sidebar').classList.toggle('active');
                 document.getElementById('mainContent').classList.toggle('active');
             });
+
+            async function efetuarLogout() {
+            try {
+                const response = await fetch('/logout', {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    alert('Logout realizado com sucesso!');
+                    window.location.href = '/v/login'; // Redireciona para a página de login
+                } else {
+                    alert('Erro ao realizar logout.');
+                }
+            } catch (error) {
+                console.error('Erro ao efetuar logout:', error);
+            }
+        }
         </script>
