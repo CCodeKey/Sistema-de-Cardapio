@@ -4,14 +4,33 @@
         <div class="col">
             <h2>Forma de Pagamento</h2>
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="pagamento-pix">
+                <input type="checkbox" class="form-check-input" id="pagamento-pix" required>
                 <label class="form-check-label" for="pagamento-pix">Pix</label>
             </div>
         </div>
     </div>
     <div class="row mt-4">
         <div class="col-12 text-end">
-            <a href="/comprar/{{produto.id}}/confirmar" class="btn btn-primary">Próximo</a>
+            <a href="/comprar/{{produto.id}}/confirmar" class="btn btn-primary" id="btn-proximo-pagamento">Próximo</a>
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('btn-proximo-pagamento').addEventListener('click', function (event) {
+        const checkbox = document.getElementById('pagamento-pix');
+        let isValid = true;
+
+        if (!checkbox.checked) {
+            isValid = false;
+            checkbox.classList.add('is-invalid');
+        } else {
+            checkbox.classList.remove('is-invalid');
+        }
+
+        if (!isValid) {
+            event.preventDefault();
+            alert('Por favor, selecione a forma de pagamento!');
+        }
+    });
+</script>

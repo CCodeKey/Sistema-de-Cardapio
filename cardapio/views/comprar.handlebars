@@ -39,35 +39,60 @@
         }
     </script>
 
-    <!-- Seção de Informações do Comprador -->
-    <div class="row py-5">
-        <div class="col-12">
-            <h2>Informações do Comprador</h2>
+    <div class="container py-5">
+        <!-- Seção de Informações do Comprador -->
+        <div class="row py-5">
+            <div class="col-12">
+                <h2>Informações do Comprador</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="nome" class="form-label">Nome completo</label>
+                    <input type="text" id="nome" class="form-control" placeholder="Informe seu nome completo" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="cpf" class="form-label">CPF</label>
+                    <input type="number" id="cpf" class="form-control" placeholder="Informe seu CPF" maxlength="11"
+                        required>
+                </div>
+            </div>
+            <div class="row py-2">
+                <div class="col-md-6">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" id="email" class="form-control" placeholder="Informe seu e-mail" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="telefone" class="form-label">Telefone</label>
+                    <input type="number" id="telefone" class="form-control" placeholder="Informe seu telefone" required>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label for="nome" class="form-label">Nome completo</label>
-                <input type="text" id="nome" class="form-control" placeholder="Informe seu nome completo">
-            </div>
-            <div class="col-md-6">
-                <label for="cpf" class="form-label">CPF</label>
-                <input type="number" id="cpf" class="form-control" placeholder="Informe seu CPF" maxlength="11">
-            </div>
-        </div>
-        <div class="row py-2">
-            <div class="col-md-6">
-                <label for="email" class="form-label">E-mail</label>
-                <input type="email" id="email" class="form-control" placeholder="Informe seu e-mail">
-            </div>
-            <div class="col-md-6">
-                <label for="telefone" class="form-label">Telefone</label>
-                <input type="number" id="telefone" class="form-control" placeholder="Informe seu telefone">
+        <div class="row mt-4">
+            <div class="col-12 text-end">
+                <a href="/comprar/{{produto.id}}/endereco" class="btn btn-primary"
+                    id="btn-proximo-comprador">Próximo</a>
             </div>
         </div>
     </div>
-    <div class="row mt-4">
-        <div class="col-12 text-end">
-            <a href="/comprar/{{produto.id}}/endereco" class="btn btn-primary">Próximo</a>
-        </div>
-    </div>
+
+    <script>
+        document.getElementById('btn-proximo-comprador').addEventListener('click', function (event) {
+            const inputs = document.querySelectorAll('input[required]');
+            let isValid = true;
+
+            inputs.forEach(function (input) {
+                if (!input.value) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+                alert('Por favor, preencha todos os campos obrigatórios!');
+            }
+        });
+    </script>
 </div>

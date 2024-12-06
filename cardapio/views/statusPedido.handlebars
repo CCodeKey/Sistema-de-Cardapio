@@ -1,0 +1,30 @@
+<div class="container py-5">
+    <div class="row align-items-center py-4">
+        <div class="col-md-2 text-center">
+            <img src="https://i.pinimg.com/736x/c7/0e/ea/c70eea66800aa0efbf38ea33b49e0a0b.jpg" alt="Foto do Produto"
+                class="img-fluid rounded">
+        </div>
+        <div class="col-md-8">
+            <div class="container py-5">
+                <h3 class="mb-3">Informações de Entrega</h3>
+                <p>Status: {{pedido.status}}</p>
+                <p>Data do Pedido: {{pedido.data_pedido}}</p>
+                <p>Quantidade: {{pedido.quantidade}}</p>
+                <p>Endereço de Entrega: {{pedido.endereco_entrega}}</p>
+            </div>
+
+            {{!-- <p><strong>Rua:</strong> [Rua]</p>
+            <p><strong>Bairro:</strong> [Bairro]</p>
+            <p><strong>Número:</strong> [Número]</p>
+            <p><strong>Complemento:</strong> [Complemento]</p> --}}
+        </div>
+    </div>
+    <div class="row py-4">
+        <div class="col">
+            <h1 class="h4 mb-3">Status do Pedido</h1>
+            <ul class="list-unstyled">
+                <li>Pedido saiu de <strong>[cidade]</strong></li>
+            </ul>
+        </div>
+    </div>
+</div>

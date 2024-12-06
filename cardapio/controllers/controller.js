@@ -171,23 +171,38 @@ export async function comprar(req, res) {
         const precoTotal = produto.preco * quantidade;
 
         // Passa o preço total e a quantidade para o template
-        res.render('comprar', { produto, precoTotal, quantidade });
+        res.render('comprar', { produto, precoTotal, quantidade, currentStep: 'comprar' });
     } catch (error) {
         console.error('Erro ao buscar produto:', error);
         res.status(500).send('Erro ao buscar produto');
     }
 }
 
-export function comprarEndereco(req, res) {
-    res.render('endereco', { produto: { id: req.params.id } });
+export function endereco(req, res) {
+    res.render('endereco', { produto: { id: req.params.id }, currentStep: 'endereco' });
 }
 
-export function comprarPagamento(req, res) {
-    res.render('pagamento', { produto: { id: req.params.id } });
+export function pagamento(req, res) {
+    res.render('pagamento', { produto: { id: req.params.id }, currentStep: 'pagamento' });
 }
 
-export function comprarConfirmar(req, res) {
-    res.render('confirmarCompra', { produto: { id: req.params.id } });
+export async function confirmarCompra(req, res) {
+    const { id: produtoId } = req.params;
+    const { quantidade, endereco_entrega } = req.body; // Supõe-se que o endereço seja enviado
+
+    try {
+        // Inserir pedido no banco de dados
+        const result = await pool.query(
+            `INSERT INTO pedidos (id_usuario, id_produto, quantidade, endereco_entrega, status)
+            VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+            [req.session.userId, produtoId, quantidade, endereco_entrega, 'Em processamento']
+        );
+
+        res.render('confirmarCompra', { produto: { id: produtoId }, currentStep: 'confirmar' });
+    } catch (error) {
+        console.error('Erro ao registrar pedido:', error);
+        res.status(500).send('Erro ao registrar pedido');
+    }
 }
 
 export function fimCompra(req, res) {
@@ -214,4 +229,18 @@ export function atualizarQuantidade(req, res) {
 
     console.log('Carrinho atualizado:', req.session.carrinho);
     res.redirect('/carrinho');
+}
+
+export async function statusProduto(req, res) {
+    try {
+        const result = await pool.query(
+            'SELECT * FROM pedidos WHERE id_usuario = $1 ORDER BY data_pedido DESC LIMIT 1',
+            [req.session.userId]
+        );
+        const pedido = result.rows[0];
+        res.render('statusPedido', { pedido });
+    } catch (error) {
+        console.error('Erro ao buscar status do pedido:', error);
+        res.status(500).send('Erro ao buscar status do pedido');
+    }
 }

@@ -10,10 +10,13 @@ router.post('/carrinho/adicionarNoCarrinho', controller.adicionarNoCarrinho);
 
 // Compra do produto
 router.get('/comprar/:id', controller.comprar);
-router.get('/comprar/:id/endereco', controller.comprarEndereco);
-router.get('/comprar/:id/pagamento', controller.comprarPagamento);
-router.get('/comprar/:id/confirmar', controller.comprarConfirmar);
+router.get('/comprar/:id/endereco', controller.endereco);
+router.get('/comprar/:id/pagamento', controller.pagamento);
+router.get('/comprar/:id/confirmar', controller.confirmarCompra);
 router.get('/comprar/:id/fim', controller.fimCompra);
+
+// Status de entrega do produto
+router.get('/status/prod', controller.statusProduto);
 
 // Administrador
 router.get('/administrator/p/home', controller.homeAdm);

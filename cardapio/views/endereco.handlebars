@@ -21,7 +21,28 @@
     </div>
     <div class="row mt-4">
         <div class="col-12 text-end">
-            <a href="/comprar/{{ produto.id }}/pagamento" class="btn btn-primary">Próximo</a>
+            <a href="/comprar/{{ produto.id }}/pagamento" class="btn btn-primary" id="btn-proximo-endereco">Próximo</a>
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('btn-proximo-endereco').addEventListener('click', function (event) {
+        const inputs = document.querySelectorAll('input[required]');
+        let isValid = true;
+
+        inputs.forEach(function (input) {
+            if (!input.value) {
+                isValid = false;
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        if (!isValid) {
+            event.preventDefault();
+            alert('Por favor, preencha todos os campos obrigatórios!');
+        }
+    });
+</script>
