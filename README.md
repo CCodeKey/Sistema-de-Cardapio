@@ -2,7 +2,7 @@
 # Cardápio
 Esse é um projeto inicial desenvolvido com Node JS, que busca ser um cardápio simples para pequenas lanchonetes e restaurantes. Possui funcionalidades de autenticação, e gerenciamento de produtos.
 
-![/home](uploads/img.png)
+![/home](/uploads/img.png)
 ## Autores
 
 - [@CodeKey](https://www.github.com/ccodekey)
